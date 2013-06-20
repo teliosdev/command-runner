@@ -1,4 +1,4 @@
-module Runner
+module Command
 
   # Raised when a path is instantized on a platform that doesn't
   # support it.

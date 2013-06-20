@@ -1,11 +1,11 @@
-describe Runner::Paths::Spawn do
+describe Command::Runner::Backends::Spawn do
   it "is available" do
-    Runner::Paths::Spawn.should be_available
+    Command::Runner::Backends::Spawn.should be_available
   end
 
   it "returns a message" do
     value = subject.call("echo", "hello")
-    value.should be_instance_of Runner::Message
+    value.should be_instance_of Command::Runner::Message
     value.should be_executed
   end
 

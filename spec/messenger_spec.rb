@@ -1,11 +1,11 @@
-describe Runner::Messenger do
+describe Command::Runner do
 
   before :each do
-    Runner::Messenger.path = Runner::Paths::Fake.new
+    Command::Runner.backend = Command::Runner::Backends::Fake.new
   end
 
   subject do
-    Runner::Messenger.new(command, arguments)
+    Command::Runner.new(command, arguments)
   end
 
   context "interpolating strings" do
@@ -47,13 +47,13 @@ describe Runner::Messenger do
     end
   end
 
-  context "selects paths" do
-    it "selects the best path" do
-      Runner::Paths::PosixSpawn.stub(:available?).and_return(false)
-      Runner::Messenger.best_path.should be_instance_of Runner::Paths::Spawn
+  context "selects backends" do
+    it "selects the best backend" do
+      Command::Runner::Backends::PosixSpawn.stub(:available?).and_return(false)
+      Command::Runner.best_backend.should be_instance_of Command::Runner::Backends::Spawn
 
-      Runner::Paths::PosixSpawn.stub(:available?).and_return(true)
-      Runner::Messenger.best_path.should be_instance_of Runner::Paths::PosixSpawn
+      Command::Runner::Backends::PosixSpawn.stub(:available?).and_return(true)
+      Command::Runner.best_backend.should be_instance_of Command::Runner::Backends::PosixSpawn
     end
   end
 end

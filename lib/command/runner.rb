@@ -1,34 +1,40 @@
 require 'shellwords'
+require 'future'
 
-module Runner
+require 'command/runner/version'
+require 'command/runner/message'
+require 'command/runner/exceptions'
+require 'command/runner/backends'
+
+module Command
 
   # This handles the execution of commands.
-  class Messenger
+  class Runner
 
     class << self
-      # Gets the default path to use with the messenger.
-      # Defaults to the best available path.
+      # Gets the default backend to use with the messenger.
+      # Defaults to the best available backend.
       #
-      # @return [#call] a path to use.
-      def path
-        @path ||= best_path
+      # @return [#call] a backend to use.
+      def backend
+        @backend ||= best_backend
       end
 
-      # Returns the best path for messenger to use.
+      # Returns the best backend for messenger to use.
       #
-      # @return [#call] a path to use.
-      def best_path
-        if Paths::PosixSpawn.available?
-          Paths::PosixSpawn.new
-        elsif Paths::Spawn.available?
-          Paths::Spawn.new
+      # @return [#call] a backend to use.
+      def best_backend
+        if Backends::PosixSpawn.available?
+          Backends::PosixSpawn.new
+        elsif Backends::Spawn.available?
+          Backends::Spawn.new
         else
-          Paths::Fake.new
+          Backends::Fake.new
         end
       end
 
-      # Sets the default path to use with the messenger.
-      attr_writer :path
+      # Sets the default backend to use with the messenger.
+      attr_writer :backend
     end
 
     # The command the messenger was initialized with.
@@ -48,18 +54,18 @@ module Runner
       @options.dup.freeze
     end
 
-    # Gets the path to be used by the messenger.  If it is not defined
+    # Gets the backend to be used by the messenger.  If it is not defined
     # on the instance, it'll get the class default.
     #
-    # @see Messenger.path
-    # @return [Paths::Fake] or a subclass.
-    def path
-      @path || self.class.path
+    # @see Messenger.backend
+    # @return [#call] a backend to use.
+    def backend
+      @backend || self.class.backend
     end
 
-    # Sets the path to be used by the messenger.  This is local to the
+    # Sets the backend to be used by the messenger.  This is local to the
     # instance.
-    attr_writer :path
+    attr_writer :backend
 
     # Initialize the messenger.
     #
@@ -76,7 +82,7 @@ module Runner
     # Runs the command and arguments with the given interpolations;
     # defaults to no interpolations.
     def pass(interops = {}, options = {})
-      path.call(*contents(interops), options.delete(:env) || {}, options)
+      backend.call(*contents(interops), options.delete(:env) || {}, options)
     end
 
     # The command line being run by the runner. Interpolates the

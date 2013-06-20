@@ -1,12 +1,12 @@
 $LOAD_PATH.unshift 'lib'
-require "runner/version"
+require "command-runner/version"
 
 Gem::Specification.new do |s|
-  s.name              = "runner"
+  s.name              = "command-runner"
   s.version           = Supernova::VERSION
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           = "Runs commands."
-  s.homepage          = "http://github.com/redjazz96/runner"
+  s.homepage          = "http://github.com/redjazz96/command-runner"
   s.email             = "redjazz96@gmail.com"
   s.authors           = [ "Jeremy Rodi" ]
   s.has_rdoc          = false
