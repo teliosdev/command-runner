@@ -14,6 +14,7 @@ message.line        # => "echo hello"
 ```
 
 with interpolations...
+
 ```Ruby
 line = Command::Runner.new("echo", "{interpolation}")
 message = line.pass(:interpolation => "watermelons")
@@ -22,6 +23,7 @@ message.line   # => "echo watermelons"
 ```
 
 that escapes bad stuff...
+
 ```Ruby
 message = line.pass(:interpolation => "`uname -a`")
 message.stdout # => "`uname -a`\n"
@@ -29,6 +31,7 @@ message.line   # => "echo \\`uname\\ -a\\`"
 ```
 
 unless you don't want it to.
+
 ```Ruby
 line = Command::Runner.new("echo", "{{interpolation}}")
 message = line.pass(:interpolation => "`uname -a`")
@@ -37,6 +40,7 @@ message.line   # => "echo `uname -a`"
 ```
 
 It can also use different methods to run commands...
+
 ```Ruby
 line = Command::Runner.new("echo", "something")
 line.backends = Command::Runner::Backends::Spawn.new
