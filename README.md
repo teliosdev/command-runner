@@ -1,4 +1,4 @@
-# Command Runner
+# Command Runner [![Build Status](https://travis-ci.org/redjazz96/command-runner.png?branch=master)](https://travis-ci.org/redjazz96/command-runner)
 Runs commands.
 
 ```Ruby
