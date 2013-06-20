@@ -37,7 +37,7 @@ module Command
         def call(command, arguments, env = {}, options = {})
           @ran << [command, arguments]
 
-          Message.new env: env, options: options
+          Message.new :env => env, :options => options
         end
 
         # Determines whether or not the given command and arguments were

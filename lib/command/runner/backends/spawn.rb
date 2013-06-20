@@ -25,7 +25,8 @@ module Command
           stdout_r, stdout_w = IO.pipe
           stdin_r,  stdin_w  = IO.pipe
 
-          new_options = options.merge(in: stdin_r, out: stdout_w, err: stderr_w)
+          new_options = options.merge(:in => stdin_r,
+            :out => stdout_w, :err => stderr_w)
 
           if new_options[:input]
             stdin_w.write(new_options.delete(:input))
@@ -43,18 +44,29 @@ module Command
 
             [stdout_w, stderr_w].each(&:close)
 
-            Message.new process_id: process_id,
-              exit_code: status.exitstatus, finished: true,
-              time: (start_time - end_time).abs, env: env,
-              options: options, stdout: stdout_r.read,
-              stderr: stderr_r.read, line: line,
-              executed: true, status: status
+            Message.new :process_id => process_id,
+                        :exit_code  => status.exitstatus,
+                        :finished   => true,
+                        :time       => (start_time - end_time).abs,
+                        :env        => env,
+                        :options    => options,
+                        :stdout     => stdout_r.read,
+                        :stderr     => stderr_r.read,
+                        :line       => line,
+                        :executed   => true,
+                        :status     => status
           end
 
         rescue Errno::ENOENT => e
-          Message.new exit_code: 127, finished: true, time: -1,
-          env: {}, options: {}, stdout: "", stderr: e.message,
-          line: line, executed: false
+          Message.new :exit_code => 127,
+                      :finished  => true,
+                      :time      => -1,
+                      :env       => {},
+                      :options   => {},
+                      :stdout    => "",
+                      :stderr    => e.message,
+                      :line      => line,
+                      :executed  => false
         end
 
         # Spawn the given process, in the environment with the

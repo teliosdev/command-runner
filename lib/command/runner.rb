@@ -84,7 +84,7 @@ module Command
     # Runs the command and arguments with the given interpolations;
     # defaults to no interpolations.
     def pass(interops = {}, options = {})
-      backend.call(*contents(interops), options.delete(:env) || {}, options)
+      backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten)
     end
 
     # The command line being run by the runner. Interpolates the
@@ -109,6 +109,7 @@ module Command
     # @return [String] the interpolated string.
     def interpolate(string, interops = {})
       interops = interops.to_a.map { |(k, v)| { k.to_s => v } }.inject(&:merge) || {}
+
       string.gsub(/(\{{1,2})([0-9a-zA-Z_\-]+)(\}{1,2})/) do |m|
         if interops.key?($2) && $1.length == $3.length
           if $1.length < 2 then escape(interops[$2].to_s) else interops[$2] end

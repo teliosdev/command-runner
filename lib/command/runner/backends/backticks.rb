@@ -39,11 +39,16 @@ module Command
             end_time = Time.now
           end
 
-          Message.new process_id: $?.pid,
-            exit_code: $?.exitstatus, finished: true,
-            time: (start_time - end_time).abs, env: env,
-            options: {}, stdout: output, line: line,
-            executed: true, status: $?
+          Message.new :process_id => $?.pid,
+                      :exit_code => $?.exitstatus,
+                      :finished => true,
+                      :time => (end_time - start_time).abs,
+                      :env => env,
+                      :options => {},
+                      :stdout => output,
+                      :line => line,
+                      :executed => true,
+                      :status => $?
         end
 
         private

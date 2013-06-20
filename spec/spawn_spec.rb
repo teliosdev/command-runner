@@ -1,4 +1,7 @@
 describe Command::Runner::Backends::Spawn do
+
+  next unless Process.respond_to? :spawn
+
   it "is available" do
     Command::Runner::Backends::Spawn.should be_available
   end

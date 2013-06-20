@@ -29,10 +29,16 @@ module Command
       #   process.
       def initialize(data)
         {
-          executed: false, time: 0, process_id: -1,
-          exit_code: 0, env: {}, options: {},
-          stdout: "\n", stderr: "",
-          line: "", status: nil
+          :executed   => false,
+          :time       => 0,
+          :process_id => -1,
+          :exit_code  => 0,
+          :env        => {},
+          :options    => {},
+          :stdout     => "\n",
+          :stderr     => "",
+          :line       => "",
+          :status     => nil
         }.merge(data).each do |k, v|
           instance_variable_set(:"@#{k}", (v.dup rescue v))
         end
