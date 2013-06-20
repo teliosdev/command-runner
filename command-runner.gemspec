@@ -1,9 +1,9 @@
 $LOAD_PATH.unshift 'lib'
-require "command-runner/version"
+require "command/runner/version"
 
 Gem::Specification.new do |s|
   s.name              = "command-runner"
-  s.version           = Supernova::VERSION
+  s.version           = Command::Runner::VERSION
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           = "Runs commands."
   s.homepage          = "http://github.com/redjazz96/command-runner"
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors           = [ "Jeremy Rodi" ]
   s.has_rdoc          = false
 
-  s.files             = %w( README.md LICENSE )
+  s.files             = %w( README.md )
   s.files            += Dir.glob("lib/**/*")
   s.files            += Dir.glob("spec/**/*")
 
