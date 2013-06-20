@@ -18,8 +18,6 @@ module Command
 
         # Run the given command and arguments, in the given environment.
         #
-        # @abstract
-        # @note Does nothing.
         # @param command [String] the command to run.
         # @param arguments [String] the arguments to pass to the
         #   command.
