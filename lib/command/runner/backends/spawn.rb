@@ -34,7 +34,7 @@ module Command
 
           line = [command, arguments].join(' ')
 
-          start = Time.now
+          start_time = Time.now
           process_id = spawn(env, line, new_options)
 
           future do
@@ -45,7 +45,7 @@ module Command
 
             Message.new process_id: process_id,
               exit_code: status.exitstatus, finished: true,
-              time: (start - end_time).abs, env: env,
+              time: (start_time - end_time).abs, env: env,
               options: options, stdout: stdout_r.read,
               stderr: stderr_r.read, line: line,
               executed: true, status: status

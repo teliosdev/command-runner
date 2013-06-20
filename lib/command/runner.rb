@@ -28,6 +28,8 @@ module Command
           Backends::PosixSpawn.new
         elsif Backends::Spawn.available?
           Backends::Spawn.new
+        elsif Backends::Backticks.available?
+          Backends::Backticks.new
         else
           Backends::Fake.new
         end
