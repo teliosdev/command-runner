@@ -25,4 +25,4 @@ matrix:
     - rvm: jruby-19mode
       jdk: openjdk7
     - rvm: jruby-19mode
-      jdk:oraclejdk7
+      jdk: oraclejdk7
