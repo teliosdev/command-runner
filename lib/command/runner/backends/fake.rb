@@ -20,7 +20,7 @@ module Command
         def initialize
           @ran = []
 
-          raise NotAvailablePathError unless self.class.available?
+          raise NotAvailableBackendError unless self.class.available?
         end
 
         # Run the given command and arguments, in the given environment.
