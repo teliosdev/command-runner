@@ -1,6 +1,6 @@
 describe Command::Runner::Backends::Spawn do
 
-  next unless Process.respond_to? :spawn
+  next unless Process.respond_to?(:spawn) && !(RUBY_PLATFORM == "java" && RUBY_VERSION =~ /\A1\.9/)
 
   it "is available" do
     Command::Runner::Backends::Spawn.should be_available
