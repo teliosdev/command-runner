@@ -57,4 +57,15 @@ describe Command::Runner do
       Command::Runner.best_backend.should be_instance_of Command::Runner::Backends::PosixSpawn
     end
   end
+
+  context "running bad commands" do
+    let(:command) { "some-non-existant-command" }
+    let(:arguments) { "" }
+
+    it "raises exceptions on non-existant commands" do
+      subject.backend = Command::Runner::Backends::Backticks.new
+
+      subject.pass.should be_no_command
+    end
+  end
 end

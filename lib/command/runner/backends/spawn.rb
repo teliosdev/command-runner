@@ -28,13 +28,14 @@ module Command
           stderr_r, stderr_w = IO.pipe
           stdout_r, stdout_w = IO.pipe
           stdin_r,  stdin_w  = IO.pipe
+          clean_exceptions   = options.delete(:clean_exceptions) || false
 
+          if options[:input]
+            stdin_w.write(options.delete(:input))
+          end
           new_options = options.merge(:in => stdin_r,
             :out => stdout_w, :err => stderr_w)
 
-          if new_options[:input]
-            stdin_w.write(new_options.delete(:input))
-          end
           stdin_w.close
 
           line = [command, arguments].join(' ')

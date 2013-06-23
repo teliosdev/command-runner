@@ -10,12 +10,7 @@ describe Command::Runner::Backends::Backticks do
     value.should be_executed
   end
 
-  it "doesn't block" do
-    start_time = Time.now
-    value = subject.call("sleep", "0.5")
-    end_time = Time.now
-
-    (end_time - start_time).should be_within((1.0/100)).of(0)
-    value.time.should be_within(0.1).of(0.5)
+  it "gives the correct time" do
+    subject.call("sleep", "0.5").time.should be_within(0.1).of(0.5)
   end
 end

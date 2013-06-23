@@ -32,24 +32,22 @@ module Command
           start_time = nil
           end_time = nil
 
-          future do
-            with_modified_env(env) do
-              start_time = Time.now
-              output << `#{command} #{arguments}`
-              end_time = Time.now
-            end
-
-            Message.new :process_id => $?.pid,
-                        :exit_code => $?.exitstatus,
-                        :finished => true,
-                        :time => (end_time - start_time).abs,
-                        :env => env,
-                        :options => {},
-                        :stdout => output,
-                        :line => [command, arguments].join(' '),
-                        :executed => true,
-                        :status => $?
+          with_modified_env(env) do
+            start_time = Time.now
+            output << `#{command} #{arguments}`
+            end_time = Time.now
           end
+
+          Message.new :process_id => $?.pid,
+                      :exit_code => $?.exitstatus,
+                      :finished => true,
+                      :time => (end_time - start_time).abs,
+                      :env => env,
+                      :options => {},
+                      :stdout => output,
+                      :line => [command, arguments].join(' '),
+                      :executed => true,
+                      :status => $?
         end
 
         private

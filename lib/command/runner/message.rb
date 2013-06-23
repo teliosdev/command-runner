@@ -5,6 +5,15 @@ module Command
     # its exit code, process id, and even time it took to run.
     class Message
 
+      # For when a message is created for a NoCommandError.
+      #
+      # @param line [String] the line that was executed, but gave a
+      #   +Errno::ENOENT+ error.
+      # @ return [Message]
+      def self.error(line)
+        Message.new(:line => line, :exit_code => 127)
+      end
+
       # Initialize the message with the given data about the process.
       #
       # @param data [Hash] the data about the process.
@@ -56,6 +65,14 @@ module Command
       # @return [Boolean]
       def nonzero_exit?
         exit_code != 0
+      end
+
+      # Whether or not the command existed; or, if the exit code
+      # is 127.
+      #
+      # @return [Boolean]
+      def no_command?
+        exit_code == 127
       end
 
       # @!attribute [r] exit_code

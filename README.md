@@ -49,6 +49,16 @@ line.pass
 
 but defaults to the best one.
 
+If you run a command that doesn't exist on the machine...
+
+```Ruby
+line = Command::Runner.new("some-non-existant-command", "")
+
+line.pass.no_command? # => true
+```
+
+it'll tell you.
+
 ## Compatibility
 It works on
 
