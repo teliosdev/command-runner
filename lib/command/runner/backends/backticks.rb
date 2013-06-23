@@ -3,7 +3,7 @@ module Command
     module Backends
 
       # A backend that uses ticks to do its bidding.
-      class Backticks
+      class Backticks < Fake
 
         # Returns whether or not this backend is avialable on this
         # platform.
@@ -31,22 +31,24 @@ module Command
           start_time = nil
           end_time = nil
 
-          with_modified_env(env) do
-            start_time = Time.now
-            output << `#{command} #{arguments}`
-            end_time = Time.now
-          end
+          future do
+            with_modified_env(env) do
+              start_time = Time.now
+              output << `#{command} #{arguments}`
+              end_time = Time.now
+            end
 
-          Message.new :process_id => $?.pid,
-                      :exit_code => $?.exitstatus,
-                      :finished => true,
-                      :time => (end_time - start_time).abs,
-                      :env => env,
-                      :options => {},
-                      :stdout => output,
-                      :line => line,
-                      :executed => true,
-                      :status => $?
+            Message.new :process_id => $?.pid,
+                        :exit_code => $?.exitstatus,
+                        :finished => true,
+                        :time => (end_time - start_time).abs,
+                        :env => env,
+                        :options => {},
+                        :stdout => output,
+                        :line => [command, arguments].join(' '),
+                        :executed => true,
+                        :status => $?
+          end
         end
 
         private

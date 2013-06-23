@@ -52,6 +52,10 @@ but defaults to the best one.
 ## Compatibility
 It works on
 
-- MRI 2.0.0 and 1.9.3
+- 2.0.0
+- 1.9.3
+- 1.8.7
+- REE
+- JRuby (1.8 Mode)
 
 unless the travis build fails.

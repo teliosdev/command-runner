@@ -1,9 +1,7 @@
-describe Command::Runner::Backends::Spawn do
-
-  next unless Process.respond_to? :spawn
+describe Command::Runner::Backends::Backticks do
 
   it "is available" do
-    Command::Runner::Backends::Spawn.should be_available
+    Command::Runner::Backends::Backticks.should be_available
   end
 
   it "returns a message" do
@@ -19,13 +17,5 @@ describe Command::Runner::Backends::Spawn do
 
     (end_time - start_time).should be_within((1.0/100)).of(0)
     value.time.should be_within((2.0/100)).of(0.5)
-  end
-
-  it "can not be available" do
-    Command::Runner::Backends::Spawn.stub(:available?).and_return(false)
-
-    expect {
-      Command::Runner::Backends::Spawn.new
-    }.to raise_error(Command::Runner::NotAvailableBackendError)
   end
 end

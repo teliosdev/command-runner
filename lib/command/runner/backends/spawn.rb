@@ -7,7 +7,7 @@ module Command
 
         # (see Fake.available?)
         def self.available?
-          Process.respond_to?(:spawn)
+          Process.respond_to?(:spawn) && !(RUBY_PLATFORM == "java" && RUBY_VERSION =~ /\A1\.9/)
         end
 
         # Initialize the backend.
