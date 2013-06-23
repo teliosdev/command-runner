@@ -16,6 +16,6 @@ describe Command::Runner::Backends::Backticks do
     end_time = Time.now
 
     (end_time - start_time).should be_within((1.0/100)).of(0)
-    value.time.should be_within((2.1/100)).of(0.5)
+    value.time.should be_within(0.1).of(0.5)
   end
 end
