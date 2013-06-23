@@ -52,6 +52,8 @@ module Command
     # The options the messenger was initialized with.
     #
     # @return [Hash]
+    # @!parse
+    #   attr_reader :options
     def options
       @options.dup.freeze
     end
@@ -59,7 +61,7 @@ module Command
     # Gets the backend to be used by the messenger.  If it is not defined
     # on the instance, it'll get the class default.
     #
-    # @see Messenger.backend
+    # @see Runner.backend
     # @return [#call] a backend to use.
     def backend
       @backend || self.class.backend
@@ -83,8 +85,31 @@ module Command
 
     # Runs the command and arguments with the given interpolations;
     # defaults to no interpolations.
-    def pass(interops = {}, options = {})
+    #
+    # @raise [NoCommandError] on no command.
+    # @param interops [Hash<Symbol, Object>] the interpolations to
+    #   make.
+    # @param options [Hash<Symbol, Object>] the options for the
+    #   backend.
+    # @return [Message]
+    def pass!(interops = {}, options = {})
       backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten)
+
+    rescue Errno::ENOENT
+      raise NoCommandError, @command
+    end
+
+    # Runs the command and arguments with the given interpolations;
+    # defaults to no interpolations.  Calls {#pass!}, but does not
+    # raise an error.
+    #
+    # @param (see #pass!)
+    # @return (see #pass!)
+    def pass(interops = {}, options = {})
+      pass! interops, options
+
+    rescue NoCommandError
+      Message.new(:line => contents(interops))
     end
 
     # The command line being run by the runner. Interpolates the

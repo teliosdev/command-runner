@@ -5,7 +5,10 @@ module Command
       # Spawns a process using ruby's Process.spawn.
       class Spawn < Fake
 
-        # (see Fake.available?)
+        # Returns whether or not this backend is available on this
+        # platform.
+        #
+        # @return [Boolean]
         def self.available?
           Process.respond_to?(:spawn) && !(RUBY_PLATFORM == "java" && RUBY_VERSION =~ /\A1\.9/)
         end
@@ -17,6 +20,7 @@ module Command
 
         # Run the given command and arguments, in the given environment.
         #
+        # @raise [Errno::ENOENT] if the command doesn't exist.
         # @param (see Fake#call)
         # @return (see Fake#call)
         def call(command, arguments, env = {}, options = {})
@@ -56,17 +60,6 @@ module Command
                         :executed   => true,
                         :status     => status
           end
-
-        rescue Errno::ENOENT => e
-          Message.new :exit_code => 127,
-                      :finished  => true,
-                      :time      => -1,
-                      :env       => {},
-                      :options   => {},
-                      :stdout    => "",
-                      :stderr    => e.message,
-                      :line      => line,
-                      :executed  => false
         end
 
         # Spawn the given process, in the environment with the

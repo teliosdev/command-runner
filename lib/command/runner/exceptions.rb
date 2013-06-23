@@ -6,5 +6,9 @@ module Command
     # support it.
     class NotAvailableBackendError < StandardError; end
 
+    # Raised when a command that was passed is not available on this
+    # platform.
+    class NoCommandError < StandardError; end
+
   end
 end
