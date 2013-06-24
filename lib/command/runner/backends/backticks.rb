@@ -27,7 +27,7 @@ module Command
         # @param options [Hash] the options to run the command under.
         # @return [Message, Object] message if no block is given, the
         #   result of the block call otherwise.
-        def call(command, arguments, env = {}, options = {})
+        def call(command, arguments, env = {}, options = {}, &block)
           super
           output = ""
           start_time = nil
