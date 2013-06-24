@@ -25,7 +25,8 @@ module Command
         # @param env [Hash] the enviornment to run the command
         #   under.
         # @param options [Hash] the options to run the command under.
-        # @return [Message] information about the process that ran.
+        # @return [Message, Object] message if no block is given, the
+        #   result of the block call otherwise.
         def call(command, arguments, env = {}, options = {})
           super
           output = ""
@@ -38,7 +39,7 @@ module Command
             end_time = Time.now
           end
 
-          Message.new :process_id => $?.pid,
+          message = Message.new :process_id => $?.pid,
                       :exit_code => $?.exitstatus,
                       :finished => true,
                       :time => (end_time - start_time).abs,
@@ -48,6 +49,12 @@ module Command
                       :line => [command, arguments].join(' '),
                       :executed => true,
                       :status => $?
+
+          if block_given?
+            block.call(message)
+          else
+            message
+          end
         end
 
         private

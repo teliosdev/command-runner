@@ -89,14 +89,16 @@ module Command
     # @note This method may not raise a {NoCommandError} and instead
     #   return a {Message} with the error code +127+, even if the
     #   command doesn't exist.
+    # @yield [Message] when the command finishes.
     # @raise [NoCommandError] on no command.
     # @param interops [Hash<Symbol, Object>] the interpolations to
     #   make.
     # @param options [Hash<Symbol, Object>] the options for the
     #   backend.
-    # @return [Message]
-    def pass!(interops = {}, options = {})
-        backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten)
+    # @return [Message, Object] message if no block was given, the
+    #   return value of the block otherwise.
+    def pass!(interops = {}, options = {}, &block)
+      backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten, &block)
 
     rescue Errno::ENOENT
       raise NoCommandError, @command
@@ -106,13 +108,20 @@ module Command
     # defaults to no interpolations.  Calls {#pass!}, but does not
     # raise an error.
     #
+    # @yield (see #pass!)
     # @param (see #pass!)
     # @return (see #pass!)
-    def pass(interops = {}, options = {})
-      pass! interops, options
+    def pass(interops = {}, options = {}, &block)
+      pass! interops, options, &block
 
     rescue NoCommandError
-      Message.error(:line => contents(interops))
+      message = Message.error(contents(interops).join(' '))
+
+      if block_given?
+        block.call(message)
+      else
+        message
+      end
     end
 
     # The command line being run by the runner. Interpolates the

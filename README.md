@@ -59,6 +59,18 @@ line.pass.no_command? # => true
 
 it'll tell you.
 
+It calls the given block...
+
+```Ruby
+line = Command::Runner.new("echo", "{something}")
+
+line.pass(something: "hello") do |message|
+  message.stdout
+end # => "hello\n"
+```
+
+and return the value.
+
 ## Compatibility
 It works on
 

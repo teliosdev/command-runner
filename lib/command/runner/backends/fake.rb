@@ -28,17 +28,20 @@ module Command
         # @abstract
         # @note Does nothing.
         # @raise [Errno::ENOENT] if the command doesn't exist.
+        # @yield [message] when the command finishes.
         # @param command [String] the command to run.
         # @param arguments [String] the arguments to pass to the
         #   command.
         # @param env [Hash] the enviornment to run the command
         #   under.
         # @param options [Hash] the options to run the command under.
-        # @return [Message] information about the process that ran.
-        def call(command, arguments, env = {}, options = {})
+        # @return [Message, Object] message if no block is given, the
+        #   result of the block call otherwise.
+        def call(command, arguments, env = {}, options = {}, &block)
           @ran << [command, arguments]
 
-          Message.new :env => env, :options => options
+          message = Message.new :env => env, :options => options, :line =>
+            [command, arguments].join(' ')
         end
 
         # Determines whether or not the given command and arguments were

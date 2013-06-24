@@ -6,7 +6,9 @@ module Command
       class Spawn < Fake
 
         # Returns whether or not this backend is available on this
-        # platform.
+        # platform.  Process.spawn doesn't work the way we want it to
+        # on JRuby 1.9 mode, so we prevent this from being used on
+        # that platform.
         #
         # @return [Boolean]
         def self.available?
@@ -20,10 +22,14 @@ module Command
 
         # Run the given command and arguments, in the given environment.
         #
+        # @note The block is called in another thread, so in ruby
+        #   versions other than MRI, make sure your code is
+        #   thread-safe.
         # @raise [Errno::ENOENT] if the command doesn't exist.
+        # @yield (see Fake#call)
         # @param (see Fake#call)
         # @return (see Fake#call)
-        def call(command, arguments, env = {}, options = {})
+        def call(command, arguments, env = {}, options = {}, &block)
           super
           stderr_r, stderr_w = IO.pipe
           stdout_r, stdout_w = IO.pipe
@@ -49,7 +55,7 @@ module Command
 
             [stdout_w, stderr_w].each(&:close)
 
-            Message.new :process_id => process_id,
+            message = Message.new :process_id => process_id,
                         :exit_code  => status.exitstatus,
                         :finished   => true,
                         :time       => (start_time - end_time).abs,
@@ -60,6 +66,12 @@ module Command
                         :line       => line,
                         :executed   => true,
                         :status     => status
+
+            if block_given?
+              block.call(message)
+            else
+              message
+            end
           end
         end
 

@@ -47,7 +47,7 @@ describe Command::Runner do
     end
   end
 
-  context "selects backends" do
+  context "selecting backends" do
     it "selects the best backend" do
       Command::Runner::Backends::PosixSpawn.stub(:available?).and_return(false)
       Command::Runner::Backends::Spawn.stub(:available?).and_return(true)
@@ -58,14 +58,23 @@ describe Command::Runner do
     end
   end
 
-  context "running bad commands" do
+  context "bad commands" do
     let(:command) { "some-non-existant-command" }
     let(:arguments) { "" }
 
-    it "raises exceptions on non-existant commands" do
+    before :each do
       subject.backend = Command::Runner::Backends::Backticks.new
+    end
 
-      subject.pass.should be_no_command
+    its(:pass) { should be_no_command }
+
+    it "calls the block given" do
+      subject.backend = Command::Runner::Backends::Backticks.new
+      subject.pass do |message|
+        message.should be_no_command
+
+        message.line.should == "some-non-existant-command "
+      end
     end
   end
 end

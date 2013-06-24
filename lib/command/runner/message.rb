@@ -11,7 +11,7 @@ module Command
       #   +Errno::ENOENT+ error.
       # @ return [Message]
       def self.error(line)
-        Message.new(:line => line, :exit_code => 127)
+        new(:line => line, :exit_code => 127)
       end
 
       # Initialize the message with the given data about the process.
