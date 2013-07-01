@@ -28,7 +28,7 @@ module Command
         # @abstract
         # @note Does nothing.
         # @raise [Errno::ENOENT] if the command doesn't exist.
-        # @yield [message] when the command finishes.
+        # @yield [Message] when the command finishes.
         # @param command [String] the command to run.
         # @param arguments [String] the arguments to pass to the
         #   command.

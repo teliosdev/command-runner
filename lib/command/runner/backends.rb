@@ -6,6 +6,7 @@ module Command
     # different method of executing the process.
     module Backends
 
+      autoload :SSH, "command/runner/backends/ssh"
       autoload :Fake, "command/runner/backends/fake"
       autoload :Spawn, "command/runner/backends/spawn"
       autoload :Backticks, "command/runner/backends/backticks"

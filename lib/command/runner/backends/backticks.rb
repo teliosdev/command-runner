@@ -19,6 +19,7 @@ module Command
         # Run the given command and arguments, in the given environment.
         #
         # @raise [Errno::ENOENT] if the command doesn't exist.
+        # @yield [Message] when the command finishes.
         # @param command [String] the command to run.
         # @param arguments [String] the arguments to pass to the
         #   command.
