@@ -104,6 +104,8 @@ module Command
       raise NoCommandError, @command
     end
 
+    alias_method :run!, :pass!
+
     # Runs the command and arguments with the given interpolations;
     # defaults to no interpolations.  Calls {#pass!}, but does not
     # raise an error.
@@ -123,6 +125,8 @@ module Command
         message
       end
     end
+
+    alias_method :run, :pass
 
     # The command line being run by the runner. Interpolates the
     # arguments with the given interpolations.
