@@ -1,5 +1,6 @@
 # Command Runner 
 [![Build Status](https://travis-ci.org/redjazz96/command-runner.png?branch=master)](https://travis-ci.org/redjazz96/command-runner) [![Code Climate](https://codeclimate.com/github/redjazz96/command-runner.png)](https://codeclimate.com/github/redjazz96/command-runner)
+
 Runs commands.
 
 ```Ruby
