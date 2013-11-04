@@ -83,3 +83,7 @@ It works on
 - JRuby (1.8 Mode)
 
 unless the travis build fails.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/redjazz96/command-runner/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
