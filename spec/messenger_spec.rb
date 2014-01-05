@@ -101,14 +101,14 @@ describe Command::Runner do
     end
 
     it "escapes bad values" do
-      subject.pass(interpolation: "`uname -a`") do |message|
+      subject.pass(:interpolation => "`uname -a`") do |message|
         expect(message.stdout).to eq "`uname -a`\n"
       end
     end
 
     it "returns the last value in the block" do
       expect(
-        subject.pass(interpolation: "hi") { |m| m.stdout }
+        subject.pass(:interpolation => "hi") { |m| m.stdout }
       ).to eq "hi\n"
     end
 
