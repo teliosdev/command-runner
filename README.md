@@ -81,8 +81,9 @@ It works on
 - 2.0.0
 - 1.9.3
 - 1.8.7
-- REE
-- JRuby (1.8 Mode)
+- JRuby (2.0 Mode)
+- JRuby (1.9 Mode)
+
 
 unless the travis build fails.
 
