@@ -1,2 +1,4 @@
 -I./lib
 -rcommand/runner
+--format Fuubar
+--color

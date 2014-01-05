@@ -23,4 +23,5 @@ desc
   s.add_dependency 'promise', '~> 0.3'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'yard'
+  s.add_development_dependency 'fuubar'
 end
