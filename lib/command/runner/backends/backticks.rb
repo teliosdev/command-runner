@@ -1,3 +1,5 @@
+require 'stringio'
+
 module Command
   class Runner
     module Backends
@@ -8,6 +10,10 @@ module Command
         # Returns whether or not this backend is avialable on this
         # platform.
         def self.available?
+          true
+        end
+
+        def self.unsafe?
           true
         end
 

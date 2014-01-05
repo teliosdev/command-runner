@@ -16,6 +16,17 @@ module Command
           true
         end
 
+        # A backend is considered unsafe when the arguments are
+        # exposed directly to the shell.  This is a vulnerability, so
+        # we mark the class as unsafe and when we're about to pass
+        # the arguments to the backend, escape the safe
+        # interpolations.
+        #
+        # @return [Boolean]
+        def self.unsafe?
+          false
+        end
+
         # Initialize the fake backend.
         def initialize
           @ran = []
@@ -41,7 +52,7 @@ module Command
           @ran << [command, arguments]
 
           message = Message.new :env => env, :options => options, :line =>
-            [command, arguments].join(' ')
+            [command, *arguments].join(' ')
         end
 
         # Determines whether or not the given command and arguments were
@@ -52,7 +63,12 @@ module Command
         # @param arguments [String]
         # @return [Boolean]
         def ran?(command, arguments)
-          @ran.include?([command, arguments])
+          @ran.include?([command, *arguments])
+        end
+
+        # (see ::unsafe?)
+        def unsafe?
+          self.class.unsafe?
         end
 
       end

@@ -19,6 +19,10 @@ module Command
           end
         end
 
+        def self.unsafe?
+          true
+        end
+
         # Initializes the backend.
         #
         # @param host [String] the host to connect to.
@@ -36,7 +40,8 @@ module Command
           channel = @net_ssh.open_channel do |ch|
 
 
-            ch.exec "#{command} #{arguments.join(" ")}" do |sch, success|
+            ch.exec "#{command} " \
+              "#{arguments.join(" ").shellescape}" do |sch, success|
               raise Errno::ENOENT unless success
 
               env.each do |k, v|

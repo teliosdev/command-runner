@@ -23,10 +23,10 @@ module Command
       # Returns the best backend for messenger to use.
       #
       # @return [#call] a backend to use.
-      def best_backend
-        if Backends::PosixSpawn.available?
+      def best_backend(force_unsafe = false)
+        if Backends::PosixSpawn.available? && !force_unsafe
           Backends::PosixSpawn.new
-        elsif Backends::Spawn.available?
+        elsif Backends::Spawn.available? && !force_unsafe
           Backends::Spawn.new
         elsif Backends::Backticks.available?
           Backends::Backticks.new
@@ -128,6 +128,16 @@ module Command
 
     alias_method :run, :pass
 
+    # Whether or not to force an unsafe backend.  This should only be
+    # used in cases where the developer wants the arguments passed to
+    # a shell, so that the unsafe interpolated arguments can be
+    # shell'd.
+    #
+    # @return [void]
+    def force_unsafe!
+      @backend = self.class.best_backend(true)
+    end
+
     # The command line being run by the runner. Interpolates the
     # arguments with the given interpolations.
     #
@@ -156,7 +166,7 @@ module Command
         if part =~ /(\{{1,2})([0-9a-zA-Z_\-]+)(\}{1,2})/
           if interops.key?($2) && $1.length == $3.length
             if $1.length == 1
-              escape(interops[$2].to_s)
+              escape interops[$2].to_s
             else
               interops[$2].to_s.shellsplit
             end
@@ -171,12 +181,17 @@ module Command
 
     private
 
-    # Escape the given string for a shell.
+    # Escape the given string for a shell if the backend is unsafe,
+    # otherwise it just returns the string.
     #
     # @param string [String] the string to escape.
     # @return [String] the escaped string.
     def escape(string)
-      Shellwords.escape(string)
+      if backend.unsafe?
+        Shellwords.escape(string)
+      else
+        string
+      end
     end
 
   end

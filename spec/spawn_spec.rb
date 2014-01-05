@@ -2,6 +2,8 @@ describe Command::Runner::Backends::Spawn do
 
   next unless Process.respond_to?(:spawn) && !(RUBY_PLATFORM == "java" && RUBY_VERSION =~ /\A1\.9/)
 
+  its(:unsafe?) { should be_false }
+
   it "is available" do
     Command::Runner::Backends::Spawn.should be_available
   end
@@ -18,7 +20,13 @@ describe Command::Runner::Backends::Spawn do
     end_time = Time.now
 
     (end_time - start_time).should be_within((1.0/100)).of(0)
-    value.time.should be_within((2.0/100)).of(0.5)
+    value.time.should be_within((3.0/100)).of(0.5)
+  end
+
+  it "doesn't expose arguments to the shell" do
+    value = subject.call("echo", ["`uname -a`"])
+
+    expect(value.stdout).to eq "`uname -a`\n"
   end
 
   it "can not be available" do
