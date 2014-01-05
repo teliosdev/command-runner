@@ -1,4 +1,4 @@
-# Command Runner 
+# Command Runner
 [![Build Status](https://travis-ci.org/redjazz96/command-runner.png?branch=master)](https://travis-ci.org/redjazz96/command-runner) [![Code Climate](https://codeclimate.com/github/redjazz96/command-runner.png)](https://codeclimate.com/github/redjazz96/command-runner)
 
 Runs commands.
@@ -36,6 +36,7 @@ unless you don't want it to.
 
 ```Ruby
 line = Command::Runner.new("echo", "{{interpolation}}")
+line.force_unsafe!
 message = line.pass(:interpolation => "`uname -a`")
 message.stdout # => "Linux Hyperion 3.8.0-25-generic #37-Ubuntu SMP Thu Jun 6 20:47:07 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux\n"
 message.line   # => "echo `uname -a`"
@@ -76,6 +77,7 @@ and return the value.
 ## Compatibility
 It works on
 
+- 2.1.0
 - 2.0.0
 - 1.9.3
 - 1.8.7

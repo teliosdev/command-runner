@@ -98,7 +98,7 @@ module Command
     # @return [Message, Object] message if no block was given, the
     #   return value of the block otherwise.
     def pass!(interops = {}, options = {}, &block)
-      backend.call(*[*contents(interops), options.delete(:env) || {}, options], &block)
+      backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten(1), &block)
 
     rescue Errno::ENOENT
       raise NoCommandError, @command
