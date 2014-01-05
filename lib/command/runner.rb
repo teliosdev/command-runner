@@ -158,7 +158,7 @@ module Command
             if $1.length == 1
               escape(interops[$2].to_s)
             else
-              interops[$2].to_s
+              interops[$2].to_s.shellsplit
             end
           else
             part
@@ -166,7 +166,7 @@ module Command
         else
           part
         end
-      end
+      end.flatten
     end
 
     private
