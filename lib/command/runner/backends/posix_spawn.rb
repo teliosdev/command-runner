@@ -26,8 +26,8 @@ module Command
         #
         # @see Spawn#spawn
         # @return [Numeric]
-        def spawn(env, line, options)
-          POSIX::Spawn.spawn(env, line, options)
+        def spawn(env, command, arguments, options)
+          POSIX::Spawn.spawn(env, command, *arguments, options)
         end
 
       end

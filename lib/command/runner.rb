@@ -98,7 +98,7 @@ module Command
     # @return [Message, Object] message if no block was given, the
     #   return value of the block otherwise.
     def pass!(interops = {}, options = {}, &block)
-      backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten, &block)
+      backend.call(*[*contents(interops), options.delete(:env) || {}, options], &block)
 
     rescue Errno::ENOENT
       raise NoCommandError, @command
@@ -147,15 +147,24 @@ module Command
     #
     # @param string [String] the string to interpolate.
     # @param interops [Hash] the interpolations to make.
-    # @return [String] the interpolated string.
+    # @return [Array<String>] the interpolated string.
     def interpolate(string, interops = {})
       interops = interops.to_a.map { |(k, v)| { k.to_s => v } }.inject(&:merge) || {}
+      results = [*string.shellsplit]
 
-      string.gsub(/(\{{1,2})([0-9a-zA-Z_\-]+)(\}{1,2})/) do |m|
-        if interops.key?($2) && $1.length == $3.length
-          if $1.length < 2 then escape(interops[$2].to_s) else interops[$2] end
+      results.map do |part|
+        if part =~ /(\{{1,2})([0-9a-zA-Z_\-]+)(\}{1,2})/
+          if interops.key?($2) && $1.length == $3.length
+            if $1.length == 1
+              escape(interops[$2].to_s)
+            else
+              interops[$2].to_s
+            end
+          else
+            part
+          end
         else
-          m
+          part
         end
       end
     end

@@ -36,7 +36,7 @@ module Command
           channel = @net_ssh.open_channel do |ch|
 
 
-            ch.exec "#{command} #{arguments}" do |sch, success|
+            ch.exec "#{command} #{arguments.join(" ")}" do |sch, success|
               raise Errno::ENOENT unless success
 
               env.each do |k, v|

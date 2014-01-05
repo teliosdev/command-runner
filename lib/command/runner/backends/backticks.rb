@@ -36,8 +36,12 @@ module Command
 
           with_modified_env(env) do
             start_time = Time.now
-            output << `#{command} #{arguments}`
+            output << `#{command} #{arguments.join(' ')}`
             end_time = Time.now
+          end
+
+          if $?.exitstatus == 127
+            raise NoCommandError
           end
 
           message = Message.new :process_id => $?.pid,
@@ -47,7 +51,7 @@ module Command
                       :env => env,
                       :options => {},
                       :stdout => output,
-                      :line => [command, arguments].join(' '),
+                      :line => [command, arguments].flatten.join(' '),
                       :executed => true,
                       :status => $?
 

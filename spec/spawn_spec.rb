@@ -7,14 +7,14 @@ describe Command::Runner::Backends::Spawn do
   end
 
   it "returns a message" do
-    value = subject.call("echo", "hello")
+    value = subject.call("echo", ["hello"])
     value.should be_instance_of Command::Runner::Message
     value.should be_executed
   end
 
   it "doesn't block" do
     start_time = Time.now
-    value = subject.call("sleep", "0.5")
+    value = subject.call("sleep", ["0.5"])
     end_time = Time.now
 
     (end_time - start_time).should be_within((1.0/100)).of(0)
@@ -28,4 +28,5 @@ describe Command::Runner::Backends::Spawn do
       Command::Runner::Backends::Spawn.new
     }.to raise_error(Command::Runner::NotAvailableBackendError)
   end
+
 end

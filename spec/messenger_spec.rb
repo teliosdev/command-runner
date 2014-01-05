@@ -8,46 +8,58 @@ describe Command::Runner do
     Command::Runner.new(command, arguments)
   end
 
-  context "interpolating strings" do
+  context "when interpolating" do
     let(:command) { "echo" }
     let(:arguments) { "some {interpolation}" }
 
     it "interpolates correctly" do
-      subject.contents(:interpolation => "test").should == ["echo", "some test"]
+      expect(
+        subject.contents(:interpolation => "test")
+      ).to eq ["echo", ["some", "test"]]
     end
 
     it "escapes bad values" do
-      subject.contents(:interpolation => "`bad value`").should == ["echo", "some \\`bad\\ value\\`"]
+      expect(
+        subject.contents(:interpolation => "`bad value`")
+      ).to eq ["echo", ["some", "\\`bad\\ value\\`"]]
     end
 
     it "doesn't interpolate interpolation values" do
-      subject.contents(:interpolation => "{other}", :other => "hi").should == ["echo", "some \\{other\\}"]
+      expect(
+        subject.contents(:interpolation => "{other}", :other => "hi")
+      ).to eq ["echo", ["some", "\\{other\\}"]]
     end
   end
 
-  context "double interpolated strings" do
+  context "when interpolating double strings" do
     let(:command) { "echo" }
     let(:arguments) { "some {{interpolation}}" }
 
     it "interpolates correctly" do
-      subject.contents(:interpolation => "test").should == ["echo", "some test"]
+      expect(
+        subject.contents(:interpolation => "test")
+      ).to eq ["echo", ["some", "test"]]
     end
 
     it "doesn't escape bad values" do
-      subject.contents(:interpolation => "`bad value`").should == ["echo", "some `bad value`"]
+      expect(
+        subject.contents(:interpolation => "`bad value`")
+      ).to eq ["echo", ["some", "`bad value`"]]
     end
   end
 
-  context "misinterpolated strings" do
+  context "when interpolating misinterpolated strings" do
     let(:command) { "echo" }
     let(:arguments) { "some {{interpolation}" }
 
     it "doesn't interpolate" do
-      subject.contents(:interpolation => "test").should == ["echo", "some {{interpolation}"]
+      expect(
+        subject.contents(:interpolation => "test")
+      ).to eq ["echo", ["some", "{{interpolation}"]]
     end
   end
 
-  context "selecting backends" do
+  context "when selecting backends" do
     it "selects the best backend" do
       Command::Runner::Backends::PosixSpawn.stub(:available?).and_return(false)
       Command::Runner::Backends::Spawn.stub(:available?).and_return(true)
@@ -58,7 +70,7 @@ describe Command::Runner do
     end
   end
 
-  context "bad commands" do
+  context "when given bad commands" do
     let(:command) { "some-non-existant-command" }
     let(:arguments) { "" }
 
@@ -69,11 +81,9 @@ describe Command::Runner do
     its(:pass) { should be_no_command }
 
     it "calls the block given" do
-      subject.backend = Command::Runner::Backends::Backticks.new
       subject.pass do |message|
-        message.should be_no_command
 
-        message.line.should == "some-non-existant-command "
+        expect(message.line).to eq "some-non-existant-command "
       end
     end
   end

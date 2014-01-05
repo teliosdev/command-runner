@@ -44,10 +44,10 @@ module Command
 
           stdin_w.close
 
-          line = [command, arguments].join(' ')
+          line = [command, *arguments].join(' ')
 
           start_time = Time.now
-          process_id = spawn(env, line, new_options)
+          process_id = spawn(env, command, arguments, new_options)
 
           future do
             _, status = wait2(process_id)
@@ -80,8 +80,8 @@ module Command
         #
         # @see Process.spawn
         # @return [Numeric] the process id
-        def spawn(env, line, options)
-          Process.spawn(env, line, options)
+        def spawn(env, command, arguments, options)
+          Process.spawn(env, command, *arguments, options)
         end
 
         # Waits for the given process, and returns the process id and the
