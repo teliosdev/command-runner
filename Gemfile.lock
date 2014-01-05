@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    command-runner (0.6.1)
+    command-runner (0.7.1)
       promise (~> 0.3)
 
 GEM
