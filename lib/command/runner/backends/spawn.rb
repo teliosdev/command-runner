@@ -81,7 +81,7 @@ module Command
         # @see Process.spawn
         # @return [Numeric] the process id
         def spawn(env, command, arguments, options)
-          Process.spawn(env, command, *arguments, options)
+          Process.spawn(env, command, *[arguments, options].flatten)
         end
 
         # Waits for the given process, and returns the process id and the
