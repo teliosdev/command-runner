@@ -67,6 +67,14 @@ module Command
         exit_code != 0
       end
 
+      # Returns if the command was successful or not.  Success is
+      # defined as an exit code of 0.
+      #
+      # @return [Boolean]
+      def successful?
+        exit_code == 0
+      end
+
       # Whether or not the command existed; or, if the exit code
       # is 127.
       #

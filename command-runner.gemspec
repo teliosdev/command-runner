@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.homepage          = "http://github.com/redjazz96/command-runner"
   s.email             = "redjazz96@gmail.com"
   s.authors           = [ "Jeremy Rodi" ]
+  s.licenses          = [ "MIT" ]
   s.has_rdoc          = false
 
   s.files             = %w( README.md )
@@ -21,7 +22,7 @@ Gem::Specification.new do |s|
 desc
 
   s.add_dependency 'promise', '~> 0.3'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'yard'
-  s.add_development_dependency 'fuubar'
+  s.add_development_dependency 'rspec', '~> 2'
+  s.add_development_dependency 'yard', '~> 0.8'
+  s.add_development_dependency 'fuubar', '~> 1'
 end

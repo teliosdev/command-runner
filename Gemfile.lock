@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    command-runner (0.7.1)
+    command-runner (0.8.1)
       promise (~> 0.3)
 
 GEM
@@ -30,6 +30,6 @@ PLATFORMS
 
 DEPENDENCIES
   command-runner!
-  fuubar
-  rspec
-  yard
+  fuubar (~> 1)
+  rspec (~> 2)
+  yard (~> 0.8)
