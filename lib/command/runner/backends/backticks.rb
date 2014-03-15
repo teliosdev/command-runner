@@ -40,6 +40,10 @@ module Command
           start_time = nil
           end_time = nil
 
+          if options[:input]
+            raise ArgumentError, "Cannot specify options[:input] - using incorrect backend"
+          end
+
           with_modified_env(env) do
             start_time = Time.now
             output << `#{command} #{arguments.join(' ')}`

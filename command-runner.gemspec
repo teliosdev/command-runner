@@ -21,8 +21,8 @@ Gem::Specification.new do |s|
   interpolated with the interpolation syntax.
 desc
 
-  s.add_dependency 'promise', '~> 0.3'
-  s.add_development_dependency 'rspec', '~> 2'
-  s.add_development_dependency 'yard', '~> 0.8'
-  s.add_development_dependency 'fuubar', '~> 1'
+  s.add_dependency 'promise'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'yard'
+  s.add_development_dependency 'fuubar'
 end
