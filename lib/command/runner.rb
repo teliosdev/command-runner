@@ -182,7 +182,9 @@ module Command
             end
           end
 
-          if $1.length == 1
+          if ops == nil
+            m
+          elsif $1.length == 1
             escape(ops)
           else
             ops
