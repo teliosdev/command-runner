@@ -1,5 +1,5 @@
 # Command Runner
-[![Build Status](https://travis-ci.org/redjazz96/command-runner.png?branch=master)](https://travis-ci.org/redjazz96/command-runner) [![Code Climate](https://codeclimate.com/github/redjazz96/command-runner.png)](https://codeclimate.com/github/redjazz96/command-runner)
+[![Build Status](https://travis-ci.org/medcat/command-runner.png?branch=master)](https://travis-ci.org/medcat/command-runner) [![Code Climate](https://codeclimate.com/github/medcat/command-runner.png)](https://codeclimate.com/github/medcat/command-runner)
 
 Runs commands.
 
@@ -87,5 +87,5 @@ It works on
 unless the travis build fails.
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/redjazz96/command-runner/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/medcat/command-runner/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

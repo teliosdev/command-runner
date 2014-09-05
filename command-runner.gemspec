@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version           = Command::Runner::VERSION
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           = "Runs commands."
-  s.homepage          = "http://github.com/redjazz96/command-runner"
+  s.homepage          = "http://github.com/medcat/command-runner"
   s.email             = "redjazz96@gmail.com"
   s.authors           = [ "Jeremy Rodi" ]
   s.licenses          = [ "MIT" ]
