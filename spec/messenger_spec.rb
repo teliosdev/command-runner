@@ -1,7 +1,7 @@
 describe Command::Runner do
 
   before :each do
-    Command::Runner.backend = Command::Runner::Backends::Fake.new
+    Command::Runner.backend = Command::Runner::Backends::UnsafeFake.new
   end
 
   subject do
@@ -21,13 +21,13 @@ describe Command::Runner do
     it "escapes bad values" do
       expect(
         subject.contents(:interpolation => "`bad value`")
-      ).to eq ["echo", ["some", "`bad value`"]]
+      ).to eq ["echo", ["some", "\\`bad\\ value\\`"]]
     end
 
     it "doesn't interpolate interpolation values" do
       expect(
         subject.contents(:interpolation => "{other}", :other => "hi")
-      ).to eq ["echo", ["some", "{other}"]]
+      ).to eq ["echo", ["some", "\\{other\\}"]]
     end
   end
 
@@ -44,7 +44,7 @@ describe Command::Runner do
     it "doesn't escape bad values" do
       expect(
         subject.contents(:interpolation => "`bad value`")
-      ).to eq ["echo", ["some", "`bad", "value`"]]
+      ).to eq ["echo", ["some", "`bad value`"]]
     end
   end
 
@@ -61,16 +61,17 @@ describe Command::Runner do
 
   context "when selecting backends" do
     it "selects the best backend" do
-      Command::Runner::Backends::PosixSpawn.stub(:available?).and_return(false)
-      Command::Runner::Backends::Spawn.stub(:available?).and_return(true)
-      Command::Runner.best_backend.should be_instance_of Command::Runner::Backends::Spawn
+      allow(Command::Runner::Backends::PosixSpawn).
+        to receive(:available?).and_return(false)
+      allow(Command::Runner::Backends::Spawn).
+        to receive(:available?).and_return(true)
+      expect(Command::Runner.best_backend).
+        to be_instance_of Command::Runner::Backends::Spawn
 
-      Command::Runner::Backends::PosixSpawn.stub(:available?).and_return(true)
-      Command::Runner.best_backend.should be_instance_of Command::Runner::Backends::PosixSpawn
-    end
-
-    it "takes into account unsafe backends" do
-      Command::Runner.best_backend(true).should be_unsafe
+      allow(Command::Runner::Backends::PosixSpawn).
+        to receive(:available?).and_return(true)
+      expect(Command::Runner.best_backend).
+        to be_instance_of Command::Runner::Backends::PosixSpawn
     end
   end
 
@@ -82,7 +83,9 @@ describe Command::Runner do
       subject.backend = Command::Runner::Backends::Backticks.new
     end
 
-    its(:pass) { should be_no_command }
+    it "should result in no command" do
+      expect(subject.pass).to be_no_command
+    end
 
     it "calls the block given" do
       subject.pass do |message|

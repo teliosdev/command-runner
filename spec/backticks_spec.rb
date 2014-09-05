@@ -1,19 +1,19 @@
 describe Command::Runner::Backends::Backticks do
 
   it "is available" do
-    Command::Runner::Backends::Backticks.should be_available
+    expect(Command::Runner::Backends::Backticks).to be_available
   end
 
-  its(:unsafe?) { should be_true }
+  it("is unsafe") { expect(described_class).to be_unsafe }
 
   it "returns a message" do
     value = subject.call("echo", ["hello"])
-    value.should be_instance_of Command::Runner::Message
-    value.should be_executed
+    expect(value).to be_instance_of Command::Runner::Message
+    expect(value).to be_executed
   end
 
   it "gives the correct time" do
-    subject.call("sleep", ["0.5"]).time.should be_within(0.1).of(0.5)
+    expect(subject.call("sleep", ["0.5"]).time).to be_within(0.1).of(0.5)
   end
 
 end

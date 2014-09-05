@@ -13,10 +13,10 @@ module Command
         #
         # @see Fake.available?
         # @return [Boolean]
-        def self.available?
+        def self.available?(_ = false)
           @_available ||= begin
             require 'posix/spawn'
-            true
+            super
           rescue LoadError => e
             false
           end
@@ -27,7 +27,13 @@ module Command
         # @see Spawn#spawn
         # @return [Numeric]
         def spawn(env, command, arguments, options)
-          POSIX::Spawn.spawn(env, command, *[arguments, options].flatten)
+          if options.delete(:unsafe)
+            POSIX::Spawn.spawn(env,
+            "#{command} #{arguments.join(' ')}", options)
+          else
+            POSIX::Spawn.spawn(env, command,
+              *[arguments, options].flatten)
+          end
         end
 
       end

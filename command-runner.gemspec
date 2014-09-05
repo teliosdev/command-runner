@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
 desc
 
   s.add_dependency 'promise'
+  s.add_dependency 'hashie', '~> 3.3'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'fuubar'

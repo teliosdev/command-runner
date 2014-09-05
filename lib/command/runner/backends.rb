@@ -11,6 +11,7 @@ module Command
       autoload :Spawn, "command/runner/backends/spawn"
       autoload :Backticks, "command/runner/backends/backticks"
       autoload :PosixSpawn, "command/runner/backends/posix_spawn"
+      autoload :UnsafeFake, "command/runner/backends/unsafe_fake"
 
     end
 

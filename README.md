@@ -46,7 +46,7 @@ It can also use different methods to run commands...
 
 ```Ruby
 line = Command::Runner.new("echo", "something")
-line.backends = Command::Runner::Backends::Spawn.new
+line.backend = Command::Runner::Backends::Spawn.new
 line.pass
 ```
 
@@ -80,7 +80,6 @@ It works on
 - 2.1.0
 - 2.0.0
 - 1.9.3
-- 1.8.7
 - JRuby (2.0 Mode)
 - JRuby (1.9 Mode)
 

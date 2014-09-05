@@ -2,3 +2,4 @@
 -rcommand/runner
 --format Fuubar
 --color
+--require spec_helper.rb

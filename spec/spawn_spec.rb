@@ -2,16 +2,16 @@ describe Command::Runner::Backends::Spawn do
 
   next unless Process.respond_to?(:spawn) && !(RUBY_PLATFORM == "java" && RUBY_VERSION =~ /\A1\.9/)
 
-  its(:unsafe?) { should be_false }
+  it("is safe") { expect(described_class).to_not be_unsafe }
 
   it "is available" do
-    Command::Runner::Backends::Spawn.should be_available
+    expect(Command::Runner::Backends::Spawn).to be_available
   end
 
   it "returns a message" do
     value = subject.call("echo", ["hello"])
-    value.should be_instance_of Command::Runner::Message
-    value.should be_executed
+    expect(value).to be_instance_of Command::Runner::Message
+    expect(value).to be_executed
   end
 
   it "doesn't block" do
@@ -19,8 +19,8 @@ describe Command::Runner::Backends::Spawn do
     value = subject.call("sleep", ["0.5"])
     end_time = Time.now
 
-    (end_time - start_time).should be_within((1.0/100)).of(0)
-    value.time.should be_within((3.0/100)).of(0.5)
+    expect(end_time - start_time).to be_within((1.0/100)).of(0)
+    expect(value.time).to be_within((3.0/100)).of(0.5)
   end
 
   it "doesn't expose arguments to the shell" do
@@ -29,8 +29,14 @@ describe Command::Runner::Backends::Spawn do
     expect(value.stdout).to eq "`uname -a`\n"
   end
 
+  it "can be unsafe" do
+    value = subject.call("echo", ["`uname -a`"], {}, unsafe: true)
+
+    expect(value.stdout).to_not eq "`uname -a`\n"
+  end
+
   it "can not be available" do
-    Command::Runner::Backends::Spawn.stub(:available?).and_return(false)
+    allow(Command::Runner::Backends::Spawn).to receive(:available?).and_return(false)
 
     expect {
       Command::Runner::Backends::Spawn.new

@@ -10,10 +10,14 @@ module Command
       class SSH < Fake
 
         # (see Fake.available?)
-        def self.available?
+        def self.available?(force_unsafe = false)
           begin
             require 'net/ssh'
-            true
+            if force_unsafe
+              false
+            else
+              true
+            end
           rescue LoadError
             false
           end
@@ -21,6 +25,10 @@ module Command
 
         def self.unsafe?
           true
+        end
+
+        def self.unsafe_execution?
+          false
         end
 
         # Initializes the backend.
@@ -41,7 +49,7 @@ module Command
 
 
             ch.exec "#{command} " \
-              "#{arguments.join(" ").shellescape}" do |sch, success|
+              "#{arguments.join(" ")}" do |sch, success|
               raise Errno::ENOENT unless success
 
               env.each do |k, v|

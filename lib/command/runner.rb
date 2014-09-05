@@ -1,5 +1,6 @@
 require 'shellwords'
 require 'future'
+require 'hashie'
 
 require 'command/runner/version'
 require 'command/runner/message'
@@ -24,11 +25,11 @@ module Command
       #
       # @return [#call] a backend to use.
       def best_backend(force_unsafe = false)
-        if Backends::PosixSpawn.available? && !force_unsafe
+        if Backends::PosixSpawn.available?(force_unsafe)
           Backends::PosixSpawn.new
-        elsif Backends::Spawn.available? && !force_unsafe
+        elsif Backends::Spawn.available?(force_unsafe)
           Backends::Spawn.new
-        elsif Backends::Backticks.available?
+        elsif Backends::Backticks.available?(force_unsafe)
           Backends::Backticks.new
         else
           Backends::Fake.new
@@ -98,7 +99,9 @@ module Command
     # @return [Message, Object] message if no block was given, the
     #   return value of the block otherwise.
     def pass!(interops = {}, options = {}, &block)
-      backend.call(*[contents(interops), options.delete(:env) || {}, options].flatten(1), &block)
+      options[:unsafe] = @unsafe
+      env = options.delete(:env) || {}
+      backend.call(*contents(interops), env, options, &block)
 
     rescue Errno::ENOENT
       raise NoCommandError, @command
@@ -135,7 +138,7 @@ module Command
     #
     # @return [void]
     def force_unsafe!
-      @backend = self.class.best_backend(true)
+      @unsafe = true
     end
 
     # The command line being run by the runner. Interpolates the
@@ -159,24 +162,33 @@ module Command
     # @param interops [Hash] the interpolations to make.
     # @return [Array<String>] the interpolated string.
     def interpolate(string, interops = {})
-      interops = interops.to_a.map { |(k, v)| { k.to_s => v } }.inject(&:merge) || {}
-      results = [*string.shellsplit]
+      interops = Hashie::Mash.new(interops)
+      args = string.shellsplit
 
-      results.map do |part|
-        if part =~ /(\{{1,2})([0-9a-zA-Z_\-]+)(\}{1,2})/
-          if interops.key?($2) && $1.length == $3.length
-            if $1.length == 1
-              escape interops[$2].to_s
-            else
-              interops[$2].to_s.shellsplit
-            end
-          else
-            part
+      args.map do |arg|
+        arg.gsub(/(\{{1,2})([0-9a-zA-Z_\-.]+)(\}{1,2})/) do |m|
+          if $1.length != $3.length
+            next m
           end
-        else
-          part
+
+          ops = interops
+          parts = $2.split('.')
+          parts.each do |part|
+            if ops.key?(part)
+              ops = ops[part]
+            else
+              ops = nil
+              break
+            end
+          end
+
+          if $1.length == 1
+            escape(ops)
+          else
+            ops
+          end
         end
-      end.flatten
+      end
     end
 
     private
@@ -187,7 +199,7 @@ module Command
     # @param string [String] the string to escape.
     # @return [String] the escaped string.
     def escape(string)
-      if backend.unsafe?
+      if backend.unsafe? || @unsafe
         Shellwords.escape(string)
       else
         string

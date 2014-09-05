@@ -9,7 +9,7 @@ module Command
 
         # Returns whether or not this backend is avialable on this
         # platform.
-        def self.available?
+        def self.available?(_ = false)
           true
         end
 

@@ -11,8 +11,10 @@ module Command
         # Returns whether or not this backend is avialable on this
         # platform.
         #
+        # @param force_unsafe [Boolean] if the backend needs to be
+        #   able to handle unsafe execution, then this will be true.
         # @abstract
-        def self.available?
+        def self.available?(force_unsafe = false)
           true
         end
 
@@ -25,6 +27,15 @@ module Command
         # @return [Boolean]
         def self.unsafe?
           false
+        end
+
+        # Whether or not it can handle unsafe execution.  This is in
+        # case the developer wants to force unsafe execution on a
+        # safe backend.
+        #
+        # @return [Boolean]
+        def self.unsafe_execution?
+          true
         end
 
         # Initialize the fake backend.

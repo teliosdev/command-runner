@@ -11,7 +11,7 @@ module Command
         # that platform.
         #
         # @return [Boolean]
-        def self.available?
+        def self.available?(_ = false)
           Process.respond_to?(:spawn) && !(RUBY_PLATFORM == "java" && RUBY_VERSION =~ /\A1\.9/)
         end
 
@@ -81,7 +81,11 @@ module Command
         # @see Process.spawn
         # @return [Numeric] the process id
         def spawn(env, command, arguments, options)
-          Process.spawn(env, command, *[arguments, options].flatten)
+          if options.delete(:unsafe)
+            Process.spawn(env, "#{command} #{arguments.join(' ')}", options)
+          else
+            Process.spawn(env, command, *arguments, options)
+          end
         end
 
         # Waits for the given process, and returns the process id and the
