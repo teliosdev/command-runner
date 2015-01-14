@@ -1,5 +1,5 @@
 # Command Runner
-[![Build Status](https://travis-ci.org/medcat/command-runner.png?branch=master)](https://travis-ci.org/medcat/command-runner) [![Code Climate](https://codeclimate.com/github/medcat/command-runner.png)](https://codeclimate.com/github/medcat/command-runner)
+[![Build Status](https://travis-ci.org/medcat/command-runner.png?branch=master)](https://travis-ci.org/medcat/command-runner) [![Code Climate](https://codeclimate.com/github/medcat/command-runner.png)](https://codeclimate.com/github/medcat/command-runner) [![Gem Version](https://badge.fury.io/rb/command-runner.svg)](http://badge.fury.io/rb/command-runner)
 
 Runs commands.
 
