@@ -17,7 +17,7 @@ module Command
           @_available ||= begin
             require 'posix/spawn'
             super
-          rescue LoadError => e
+          rescue LoadError
             false
           end
         end

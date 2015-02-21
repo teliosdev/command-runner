@@ -34,7 +34,6 @@ module Command
           stderr_r, stderr_w = IO.pipe
           stdout_r, stdout_w = IO.pipe
           stdin_r,  stdin_w  = IO.pipe
-          clean_exceptions   = options.delete(:clean_exceptions) || false
 
           if options[:input]
             stdin_w.write(options.delete(:input))

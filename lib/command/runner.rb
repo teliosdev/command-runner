@@ -65,7 +65,7 @@ module Command
     # @see Runner.backend
     # @return [#call] a backend to use.
     def backend
-      @backend || self.class.backend
+      @backend ||= self.class.backend
     end
 
     # Sets the backend to be used by the messenger.  This is local to the
@@ -79,9 +79,11 @@ module Command
     #   may contain interpolated values, like +{key}+ or +{{key}}+.
     # @param options [Hash] the options for the messenger.
     def initialize(command, arguments, options = {})
-      @command = command
+      @command   = command
       @arguments = arguments
-      @options = options
+      @options   = options
+      @unsafe    = false
+      @backend   = nil
     end
 
     # Runs the command and arguments with the given interpolations;
